@@ -38,7 +38,13 @@ except ImportError:
         allow_headers = ["*"]
         max_text_length = 5000
         device = None
+        hf_token = None
     settings = Settings()
+
+# Set Hugging Face token if available
+if settings.hf_token:
+    os.environ['HF_TOKEN'] = settings.hf_token
+    os.environ['HUGGING_FACE_HUB_TOKEN'] = settings.hf_token
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

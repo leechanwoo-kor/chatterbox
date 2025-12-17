@@ -1,0 +1,8 @@
+# Dataset Download Tools Dependencies
+datasets==2.19.0   # Pinned version that doesn't require torchcodec
+soundfile>=0.12.1
+tqdm>=4.65.0
+huggingface-hub>=0.16.4
+librosa>=0.10.0    # Audio processing
+numpy>=1.20.0      # Required by librosa
+audioread>=3.0.0   # Audio decoding backend

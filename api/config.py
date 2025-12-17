@@ -4,6 +4,7 @@ Configuration settings for Chatterbox TTS API
 
 from pydantic_settings import BaseSettings
 from typing import Optional
+from pydantic import field_validator
 
 class Settings(BaseSettings):
     # API Settings
@@ -17,7 +18,7 @@ class Settings(BaseSettings):
 
     # Model Settings
     default_model: str = "turbo"
-    preload_models: list[str] = []  # Models to preload on startup: ["turbo", "multilingual", "original"]
+    preload_models: list[str] = []  # Comma-separated models to preload: "turbo,multilingual,original"
 
     # CORS Settings
     allow_origins: list[str] = ["*"]
@@ -31,6 +32,21 @@ class Settings(BaseSettings):
 
     # Device Settings (auto-detected if not set)
     device: Optional[str] = None  # "cuda", "mps", or "cpu"
+
+    # Hugging Face Token
+    hf_token: Optional[str] = None
+
+    @field_validator('preload_models', mode='before')
+    @classmethod
+    def parse_preload_models(cls, v):
+        """Parse comma-separated string or empty string into list"""
+        if v is None or v == "" or v == []:
+            return []
+        if isinstance(v, list):
+            return v
+        if isinstance(v, str):
+            return [model.strip() for model in v.split(",") if model.strip()]
+        return []
 
     class Config:
         env_prefix = "CHATTERBOX_"

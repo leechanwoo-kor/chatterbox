@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Downloaded data
+data/
+*.wav
+*.mp3
+
+# Metadata
+metadata.txt
+
+# Hugging Face cache (로컬 캐시는 제외하지 않음, 사용자 홈 디렉토리에 있음)
