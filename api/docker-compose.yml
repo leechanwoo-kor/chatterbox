@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  chatterbox-api:
+    build:
+      context: ..
+      dockerfile: api/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - CHATTERBOX_HOST=0.0.0.0
+      - CHATTERBOX_PORT=8000
+      - CHATTERBOX_DEFAULT_MODEL=turbo
+    volumes:
+      # Mount source code for development
+      - ../src:/app/src
+      - ./api_server.py:/app/api_server.py
+      - ./config.py:/app/config.py
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
